@@ -308,7 +308,7 @@ nmea_reader_update_time( NmeaReader*  r, Token  tok )
     tm.tm_mday  = r->utc_day;
     tm.tm_isdst = -1;
 
-    fix_time = mktime( &tm ) + r->utc_diff;
+    fix_time = mktime( &tm ) - r->utc_diff;    //alxchr
     r->fix.timestamp = (long long)fix_time * 1000;
     return 0;
 }
@@ -492,6 +492,8 @@ nmea_reader_parse( NmeaReader*  r )
         D("Too short. discarded.");
         return;
     }
+
+    r->in[r->pos] = 0; // alxchr
 
     gettimeofday(&tv, NULL);
     if (_gps_state->init)
